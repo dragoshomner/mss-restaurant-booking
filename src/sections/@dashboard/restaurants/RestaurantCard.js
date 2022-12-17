@@ -20,12 +20,12 @@ const StyledProductImg = styled('img')({
 
 // ----------------------------------------------------------------------
 
-ShopProductCard.propTypes = {
+RestaurantCard.propTypes = {
   product: PropTypes.object,
 };
 
-export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
+export default function RestaurantCard({ product }) {
+  const { id, name, cover, price, colors, status, priceSale } = product;
 
   return (
     <Card>
@@ -49,7 +49,7 @@ export default function ShopProductCard({ product }) {
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link color="inherit" underline="hover">
+        <Link color="inherit" underline="hover" href={`/dashboard/restaurants/${id}`}>
           <Typography variant="subtitle2" noWrap>
             {name}
           </Typography>
