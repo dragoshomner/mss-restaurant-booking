@@ -12,16 +12,27 @@ export default function LoginForm() {
   const { onLogin } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [credentials, setCredentials] = useState({
+    email: "",
+    password: ""
+  });
 
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" />
+        <TextField 
+          name="email" 
+          label="Email address" 
+          value={credentials.email}
+          onChange={(e) => setCredentials({...credentials, email: e.target.value})}
+        />
 
         <TextField
           name="password"
           label="Password"
           type={showPassword ? 'text' : 'password'}
+          value={credentials.password}
+          onChange={(e) => setCredentials({...credentials, password: e.target.value})}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -34,7 +45,7 @@ export default function LoginForm() {
         />
       </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" sx={{ my: 2 }} onClick={onLogin}>
+      <LoadingButton fullWidth size="large" type="submit" variant="contained" sx={{ my: 2 }} onClick={() => onLogin(credentials)}>
         Login
       </LoadingButton>
     </>

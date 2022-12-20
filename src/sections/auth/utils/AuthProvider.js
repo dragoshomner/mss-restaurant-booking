@@ -2,19 +2,26 @@ import * as React from 'react';
 import { AuthContext } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'src/hooks/useLocalStorage';
+// import { useQuery } from 'react-query';
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [authUser, setAuthUser] = useLocalStorage("auth-user", null);
 
-  const handleLogin = () => {
-    const user = {
-      userName: 'dragoshomner',
-      token: 'ddawd-dawdwa-fwaghr-fefae'
-    };
+  const handleLogin = async (credentials) => {
+    const response = await fetch(process.env.REACT_APP_SERVER_URL + "/auth", {
+      method: "POST",
+      body: JSON.stringify(credentials),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
 
-    setAuthUser(user);
-    navigate('/dashboard', { replace: true });
+    if (response.ok) {
+      const data = await response.json();
+      setAuthUser(data);
+      navigate('/dashboard', { replace: true });
+    }
   };
 
   const handleLogout = () => {
