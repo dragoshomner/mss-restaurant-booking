@@ -10,14 +10,14 @@ RestaurantCard.propTypes = {
   product: PropTypes.object,
 };
 
-export default function RestaurantCard({ product }) {
-  const { restaurantId, name, address, restaurantManager } = product;
+export default function RestaurantCard({ restaurant }) {
+  const { id, name, address, managerName } = restaurant;
 
   return (
     <Card>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link color="inherit" underline="hover" href={`/dashboard/restaurants/${restaurantId}`}>
+        <Link color="inherit" underline="hover" href={`/dashboard/restaurants/${id}`}>
           <Typography variant="subtitle2" noWrap>
             {name}
           </Typography>
@@ -42,7 +42,7 @@ export default function RestaurantCard({ product }) {
               variant="body2"
             >
               <Iconify icon="mdi:user-check" color="#BCC3C8" mr={1} inline />
-              {`${restaurantManager.firstName} ${restaurantManager.lastName}`}
+              {managerName}
             </Typography>
           </Typography>
         </Stack>
