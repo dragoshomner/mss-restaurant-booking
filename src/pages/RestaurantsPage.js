@@ -24,7 +24,7 @@ export default function RestaurantsPage() {
 
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-        Restaurants
+          Restaurants
         </Typography>
 
         <RestaurantList restaurants={restaurants} />

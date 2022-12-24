@@ -17,3 +17,4 @@ export const getRestaurantProducts = async (restaurantId) => {
     }
   })).json();
 }
+

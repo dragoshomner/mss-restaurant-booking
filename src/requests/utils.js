@@ -5,3 +5,11 @@ export const getAuthToken = () => {
     }
     return "";
 }
+
+export const getUserId = () => {
+    const authUser = window.localStorage.getItem("auth-user");
+    if (authUser) {
+        return JSON.parse(authUser).userId;
+    }
+    return "";
+}
