@@ -1,15 +1,11 @@
-export const getAuthToken = () => {
+export const getAuthUser = () => {
     const authUser = window.localStorage.getItem("auth-user");
     if (authUser) {
-        return JSON.parse(authUser).token;
+        return JSON.parse(authUser);
     }
-    return "";
+    return {};
 }
 
-export const getUserId = () => {
-    const authUser = window.localStorage.getItem("auth-user");
-    if (authUser) {
-        return JSON.parse(authUser).userId;
-    }
-    return "";
-}
+export const getAuthToken = () => getAuthUser()?.token ?? "";
+
+export const getUserId = () => getAuthUser().userId ?? "";

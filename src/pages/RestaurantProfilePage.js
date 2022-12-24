@@ -39,7 +39,7 @@ export default function RestaurantProfilePage() {
 
                 { !isLoadingProducts && <ProductList products={products} /> }
 
-                { !isLoadingReviews && <ReviewList reviewData={reviewData} /> }
+                { !isLoadingReviews && reviewData?.reviewList?.length > 0 && <ReviewList reviewData={reviewData} /> }
 
                 <ReviewAddForm restaurantId={restaurantId} mt={2} />
 
