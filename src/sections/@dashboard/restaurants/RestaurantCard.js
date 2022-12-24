@@ -1,28 +1,47 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Card, Link, Typography, Stack } from '@mui/material';
+import { Card, Link, Typography, Stack, IconButton, CardHeader } from '@mui/material';
 // components
 import Iconify from '../../../components/iconify';
+// requests
+import { useMutation, useQueryClient } from 'react-query';
+import { toggleRestaurantToFavorites } from 'src/requests';
 
 // ----------------------------------------------------------------------
 
 RestaurantCard.propTypes = {
   product: PropTypes.object,
+  isFavorite: PropTypes.bool
 };
 
-export default function RestaurantCard({ restaurant }) {
+export default function RestaurantCard({ restaurant, isFavorite }) {
+  const queryClient = useQueryClient();
   const { id, name, address, managerName } = restaurant;
+  const favoriteIcon = isFavorite ? "material-symbols:star-rounded" : "material-symbols:star-outline-rounded";
+
+  const favoriteMutation = useMutation({
+    mutationFn: () => toggleRestaurantToFavorites(id, isFavorite ? 'DELETE' : 'POST'),
+    onSuccess: () => {
+        queryClient.invalidateQueries(['get-favorite-restaurants'])
+    }
+  });
+
+  const handleAddToFavorites = () => {
+    favoriteMutation.mutate();
+  }
 
   return (
     <Card>
-
+      <CardHeader
+        action={
+          <IconButton aria-label="settings" onClick={handleAddToFavorites}>
+            <Iconify icon={favoriteIcon} />
+          </IconButton>
+        }
+        title={<Link href={`/dashboard/restaurants/${id}`} color="inherit" underline="hover"> {name} </Link>}
+        titleTypographyProps={{ variant: 'subtitle1' }}
+      />
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link color="inherit" underline="hover" href={`/dashboard/restaurants/${id}`}>
-          <Typography variant="subtitle1" noWrap>
-            {name}
-          </Typography>
-        </Link>
-
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="body2">
               <Iconify icon="material-symbols:location-on" color="#BCC3C8" mr={0.5} pt={0.5} inline />
