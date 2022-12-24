@@ -1,24 +1,20 @@
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
 // @mui
-import { Container, Stack, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 // components
-import { RestaurantSort, RestaurantList, RestaurantFilterSidebar } from '../sections/@dashboard/restaurants';
-// mock
-import PRODUCTS from '../_mock/products';
+import { RestaurantList } from '../sections/@dashboard/restaurants';
+// requests
+import { getAllRestaurants } from 'src/requests';
+import { useQuery } from 'react-query';
 
 // ----------------------------------------------------------------------
 
 export default function RestaurantsPage() {
-  const [openFilter, setOpenFilter] = useState(false);
+  const { data: restaurants, isLoading } = useQuery("get-restaurants", getAllRestaurants);
 
-  const handleOpenFilter = () => {
-    setOpenFilter(true);
-  };
-
-  const handleCloseFilter = () => {
-    setOpenFilter(false);
-  };
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <>
@@ -31,18 +27,7 @@ export default function RestaurantsPage() {
         Restaurants
         </Typography>
 
-        <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <RestaurantFilterSidebar
-              openFilter={openFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
-            <RestaurantSort />
-          </Stack>
-        </Stack>
-
-        <RestaurantList restaurants={PRODUCTS} />
+        <RestaurantList restaurants={restaurants} />
       </Container>
     </>
   );

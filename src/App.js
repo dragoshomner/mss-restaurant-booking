@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from 'react-query'
 // routes
 import Router from './routes';
 // theme
@@ -9,14 +10,18 @@ import { AuthProvider } from './sections/auth/utils/AuthProvider';
 
 // ----------------------------------------------------------------------
 
+const queryClient = new QueryClient();
+
 export default function App() {
   return (
-    <AuthProvider>
-      <ThemeProvider>
-        <ScrollToTop />
-        <StyledChart />
-        <Router />
-      </ThemeProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ThemeProvider>
+          <ScrollToTop />
+          <StyledChart />
+          <Router />
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
