@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { useLocalStorage } from 'src/hooks/useLocalStorage';
+import { useGlobalModalContext } from 'src/components/dialogs/DialogProvider';
+import { MODAL_TYPES } from 'src/components/dialogs/DialogProvider';
 
 const defaultCart = {
-    restaurantId: undefined,
+    restaurant: undefined,
     products: []
 };
 
@@ -10,6 +12,7 @@ const CartContext = React.createContext(defaultCart);
 
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useLocalStorage("cart", defaultCart);
+    const { showModal } = useGlobalModalContext();
   
     const handleChangeProductQuantity = (product, quantity = 1) => {
         const changeCart = prevState => {
@@ -31,10 +34,28 @@ export const CartProvider = ({ children }) => {
 
             return {
                 ...prevState,
+                restaurant: prevState.restaurant || product.restaurant,
                 products: newProductsState
             };
         };
-        setCart(changeCart(cart));
+
+        const initializeCart = () => {
+            setCart({
+                ...cart, 
+                restaurant: product.restaurant,
+                products: [{...product, quantity}]
+            })
+        }
+        
+        if (cart.restaurant && cart.restaurant !== product.restaurant) {
+            showModal(MODAL_TYPES.CONFIRM_MODAL, {
+                title: "Are you sure you want to clear the cart?",
+                description: "By adding a product from another restaurant, you will lose the current cart.",
+                confirmCallback: initializeCart
+            });
+        } else {
+            setCart(changeCart(cart));
+        }
     }
 
     const handleClearCart = () => {

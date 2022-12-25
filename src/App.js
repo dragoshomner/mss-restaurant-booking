@@ -18,15 +18,15 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <CartProvider>
-          <GlobalModal>
+        <GlobalModal>
+          <CartProvider>
             <ThemeProvider>
               <ScrollToTop />
               <StyledChart />
               <Router />
             </ThemeProvider>
-          </GlobalModal>
-        </CartProvider>
+          </CartProvider>
+        </GlobalModal>
       </AuthProvider>
     </QueryClientProvider>
   );
