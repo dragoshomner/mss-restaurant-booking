@@ -28,11 +28,13 @@ import { fToNow } from '../../../../utils/formatTime';
 import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
 import { useCart } from './CartProvider';
+import { MODAL_TYPES, useGlobalModalContext } from 'src/components/dialogs/DialogProvider';
 
 // ----------------------------------------------------------------------
 
 export default function CartPopover() {
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
+  const { showModal } = useGlobalModalContext();
 
   const totalProducts = cart.products.length;
   const totalPrice = cart.products.reduce((accumulator, current) => accumulator + current.price * current.quantity, 0);
@@ -46,6 +48,14 @@ export default function CartPopover() {
   const handleClose = () => {
     setOpen(null);
   };
+
+  const handleClearCart = () => {
+    showModal(MODAL_TYPES.CONFIRM_MODAL, {
+      title: "Are you sure you want to clear the cart?",
+      description: "By clearing the entire cart, you will lose the current selected products.",
+      confirmCallback: () => clearCart()
+    })
+  }
 
   return (
     <>
@@ -79,7 +89,7 @@ export default function CartPopover() {
 
           {totalProducts > 0 && (
             <Tooltip title="Empty cart">
-              <IconButton color="primary">
+              <IconButton color="primary" onClick={handleClearCart}>
                 <Iconify icon="mdi:trash-can" />
               </IconButton>
             </Tooltip>

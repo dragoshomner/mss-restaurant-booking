@@ -8,6 +8,7 @@ import ScrollToTop from './components/scroll-to-top';
 import { StyledChart } from './components/chart';
 import { AuthProvider } from './sections/auth/utils/AuthProvider';
 import { CartProvider } from './layouts/dashboard/header/cart/CartProvider';
+import { GlobalModal } from './components/dialogs/DialogProvider';
 
 // ----------------------------------------------------------------------
 
@@ -18,11 +19,13 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CartProvider>
-          <ThemeProvider>
-            <ScrollToTop />
-            <StyledChart />
-            <Router />
-          </ThemeProvider>
+          <GlobalModal>
+            <ThemeProvider>
+              <ScrollToTop />
+              <StyledChart />
+              <Router />
+            </ThemeProvider>
+          </GlobalModal>
         </CartProvider>
       </AuthProvider>
     </QueryClientProvider>

@@ -12,7 +12,7 @@ export const CartProvider = ({ children }) => {
     const [cart, setCart] = useLocalStorage("cart", defaultCart);
   
     const handleChangeProductQuantity = (product, quantity = 1) => {
-        setCart(prevState => {
+        const changeCart = prevState => {
             let productExisted = false;
             let newProductsState = prevState.products.map(obj => {
                 if (obj.productName === product.productName) {
@@ -33,7 +33,8 @@ export const CartProvider = ({ children }) => {
                 ...prevState,
                 products: newProductsState
             };
-        })
+        };
+        setCart(changeCart(cart));
     }
 
     const handleClearCart = () => {
