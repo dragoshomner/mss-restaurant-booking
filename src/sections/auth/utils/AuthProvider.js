@@ -2,7 +2,6 @@ import * as React from 'react';
 import { AuthContext } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'src/hooks/useLocalStorage';
-// import { useQuery } from 'react-query';
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();

@@ -7,6 +7,7 @@ import ThemeProvider from './theme';
 import ScrollToTop from './components/scroll-to-top';
 import { StyledChart } from './components/chart';
 import { AuthProvider } from './sections/auth/utils/AuthProvider';
+import { CartProvider } from './layouts/dashboard/header/cart/CartProvider';
 
 // ----------------------------------------------------------------------
 
@@ -16,11 +17,13 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <ThemeProvider>
-          <ScrollToTop />
-          <StyledChart />
-          <Router />
-        </ThemeProvider>
+        <CartProvider>
+          <ThemeProvider>
+            <ScrollToTop />
+            <StyledChart />
+            <Router />
+          </ThemeProvider>
+        </CartProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

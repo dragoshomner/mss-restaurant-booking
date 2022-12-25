@@ -11,6 +11,7 @@ import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
+import CartPopover from './cart/CartPopover';
 
 // ----------------------------------------------------------------------
 
@@ -69,7 +70,8 @@ export default function Header({ onOpenNav }) {
           }}
         >
           <LanguagePopover />
-          <NotificationsPopover />
+          {/* <NotificationsPopover /> */}
+          <CartPopover />
           <AccountPopover />
         </Stack>
       </StyledToolbar>
