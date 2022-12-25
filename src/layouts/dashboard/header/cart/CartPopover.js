@@ -1,7 +1,4 @@
 import PropTypes from 'prop-types';
-import { set, sub } from 'date-fns';
-import { noCase } from 'change-case';
-import { faker } from '@faker-js/faker';
 import { useState } from 'react';
 // @mui
 import {
@@ -9,7 +6,6 @@ import {
   List,
   Badge,
   Button,
-  Avatar,
   Tooltip,
   Divider,
   Popover,
@@ -17,13 +13,8 @@ import {
   IconButton,
   ListItemText,
   ListItem,
-  ListSubheader,
-  ListItemAvatar,
-  ListItemButton,
   Stack, 
 } from '@mui/material';
-// utils
-import { fToNow } from '../../../../utils/formatTime';
 // components
 import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';

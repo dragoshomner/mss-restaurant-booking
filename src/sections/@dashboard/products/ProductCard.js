@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Card, Typography, Stack, CardHeader, IconButton, Link } from '@mui/material';
+import { Card, Typography, Stack, CardHeader, IconButton } from '@mui/material';
 // components
 import Iconify from '../../../components/iconify';
 import { useCart } from 'src/layouts/dashboard/header/cart/CartProvider';
