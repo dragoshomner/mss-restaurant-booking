@@ -37,7 +37,7 @@ export default function RestaurantProfilePage() {
                     </Typography>
                 </Stack>
 
-                { !isLoadingProducts && <ProductList products={products} /> }
+                { !isLoadingProducts && <ProductList products={products} restaurantId={restaurantId} /> }
 
                 { !isLoadingReviews && reviewData?.reviewList?.length > 0 && <ReviewList reviewData={reviewData} /> }
 

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 // @mui
 import {
   Box,
@@ -25,6 +26,7 @@ import { MODAL_TYPES, useGlobalModalContext } from 'src/components/dialogs/Dialo
 
 export default function CartPopover() {
   const { cart, clearCart } = useCart();
+  const navigate = useNavigate();
   const { showModal } = useGlobalModalContext();
 
   const totalProducts = cart.products.length;
@@ -46,6 +48,10 @@ export default function CartPopover() {
       description: "By clearing the entire cart, you will lose the current selected products.",
       confirmCallback: () => clearCart()
     })
+  }
+
+  const handlePlaceOrder = () => {
+    navigate('/dashboard/orders/place', { replace: true });
   }
 
   return (
@@ -104,7 +110,7 @@ export default function CartPopover() {
             <Divider sx={{ borderStyle: 'dashed' }} />
 
             <Box sx={{ p: 1 }}>
-              <Button fullWidth disableRipple>
+              <Button fullWidth disableRipple onClick={handlePlaceOrder}>
                 Place order
               </Button>
             </Box>

@@ -9,7 +9,9 @@ import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
 import RestaurantsPage from './pages/RestaurantsPage';
 import RestaurantProfilePage from './pages/RestaurantProfilePage';
+import OrdersPage from './pages/OrdersPage';
 import DashboardAppPage from './pages/DashboardAppPage';
+import PlaceOrderPage from './pages/PlaceOrderPage';
 import { ProtectedLayout } from './layouts/auth/ProtectedLayout';
 
 // ----------------------------------------------------------------------
@@ -34,6 +36,13 @@ export default function Router() {
               ]
             },
             { path: 'blog', element: <BlogPage /> },
+            { 
+              path: 'orders',
+              children: [
+                { path: '', index: true, element: <OrdersPage /> },
+                { path: 'place', element: <PlaceOrderPage /> }
+              ] 
+            }
           ],
         },
       ]

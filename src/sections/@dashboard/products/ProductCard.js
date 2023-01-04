@@ -9,14 +9,15 @@ import { useCart } from 'src/layouts/dashboard/header/cart/CartProvider';
 
 ProductCard.propTypes = {
   product: PropTypes.object,
+  restaurantId: PropTypes.number
 };
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, restaurantId }) {
   const { productName, price } = product;
   const { changeProductQuantity } = useCart();
 
   const handleAddToCart = () => {
-    changeProductQuantity(product);
+    changeProductQuantity({...product, restaurantId});
   }
 
   return (
