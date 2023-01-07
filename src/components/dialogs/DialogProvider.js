@@ -1,12 +1,15 @@
 import * as React from 'react';
 import ConfirmDialog from './ConfirmDialog';
+import AddOrEditProductDialog from './AddOrEditProductDialog';
 
 export const MODAL_TYPES = {
     CONFIRM_MODAL: "CONFIRM_MODAL",
+    ADD_OR_EDIT_PRODUCT_MODAL: "ADD_OR_EDIT_PRODUCT_MODAL",
 };
     
 const MODAL_COMPONENTS = {
      [MODAL_TYPES.CONFIRM_MODAL]: ConfirmDialog,
+     [MODAL_TYPES.ADD_OR_EDIT_PRODUCT_MODAL]: AddOrEditProductDialog,
 };
 
 const initalState = {

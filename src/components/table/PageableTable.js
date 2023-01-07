@@ -154,7 +154,7 @@ export default function PageableTable({ tableHead, tableContent }) {
                         {tableHead.map((tableHeadItem, index) => {
                           if (tableHeadItem.id === "") {
                             return (
-                              <TableCell align="right">
+                              <TableCell align="right" key={index}>
                                 <IconButton
                                   size="large"
                                   color="inherit"
