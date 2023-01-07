@@ -5,7 +5,7 @@ import { Stack, Button, Container, Typography } from "@mui/material";
 import Iconify from "../components/iconify";
 import PageableTable from "src/components/table/PageableTable";
 // requests
-import { getRestaurantProducts } from "src/requests";
+import { getMyProducts } from "src/requests";
 import { useQuery } from "react-query";
 
 // ----------------------------------------------------------------------
@@ -29,8 +29,8 @@ const mapTableContent = (tableContent) =>
 
 export default function UserPage() {
   const { data: products, isLoading: isLoadingProducts } = useQuery(
-    ["get-restaurant-products", 1],
-    () => getRestaurantProducts(1)
+    ["get-my-products"],
+    () => getMyProducts()
   );
 
   return (
