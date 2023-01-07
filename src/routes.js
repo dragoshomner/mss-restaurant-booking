@@ -12,6 +12,7 @@ import RestaurantProfilePage from './pages/RestaurantProfilePage';
 import OrdersPage from './pages/OrdersPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import PlaceOrderPage from './pages/PlaceOrderPage';
+import MyProductsPage from './pages/MyProductsPage';
 import { ProtectedLayout } from './layouts/auth/ProtectedLayout';
 
 // ----------------------------------------------------------------------
@@ -42,6 +43,12 @@ export default function Router() {
                 { path: '', index: true, element: <OrdersPage /> },
                 { path: 'place', element: <PlaceOrderPage /> }
               ] 
+            },
+            {
+              path: 'products',
+              children: [
+                { path: '', index: true, element: <MyProductsPage /> }
+              ]
             }
           ],
         },
