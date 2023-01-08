@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useGlobalModalContext } from "./DialogProvider";
 import { useQueryClient, useMutation } from "react-query";
-import { addProduct } from "src/requests";
+import { addProduct, editProduct } from "src/requests";
 
 export const PRODUCT_DIALOG_OPERATION = {
   ADD: "ADD",
@@ -29,7 +29,19 @@ export default function AddOrEditProductDialog() {
 
   const { hideModal, store } = useGlobalModalContext();
   const { modalProps } = store || {};
-  const { operation, handleSaveClicked } = modalProps || {};
+  const { operation, handleSaveClicked, inputProduct } = modalProps || {};
+
+  React.useEffect(() => {
+    setProduct(
+      inputProduct
+        ? {
+            ...inputProduct,
+            name: inputProduct.productName,
+          }
+        : DEFAULT_PRODUCT_STATE
+    );
+  }, [inputProduct]);
+
   const handleClose = () => hideModal();
 
   const handleSave = () => {
@@ -37,7 +49,10 @@ export default function AddOrEditProductDialog() {
   };
 
   const formMutation = useMutation({
-    mutationFn: () => addProduct(product),
+    mutationFn: () =>
+      operation === PRODUCT_DIALOG_OPERATION.ADD
+        ? addProduct(product)
+        : editProduct(product.productId, product),
     onSuccess: () => {
       queryClient.invalidateQueries(["get-my-products"]);
       handleSaveClicked({
@@ -48,7 +63,7 @@ export default function AddOrEditProductDialog() {
     onError: (error) => {
       handleSaveClicked({
         type: "error",
-        message: error.length > 0 ? error[0] : error,
+        message: error ? error[0] : "There was an error. Please try later.",
       });
     },
   });

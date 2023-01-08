@@ -61,7 +61,12 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function PageableTable({ tableHead, tableContent }) {
+export default function PageableTable({
+  tableHead,
+  tableContent,
+  onEditButtonClicked,
+  onDeleteButtonClicked,
+}) {
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -76,8 +81,9 @@ export default function PageableTable({ tableHead, tableContent }) {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleOpenMenu = (event) => {
+  const handleOpenMenu = (event, id) => {
     setOpen(event.currentTarget);
+    setSelected(id);
   };
 
   const handleCloseMenu = () => {
@@ -88,15 +94,6 @@ export default function PageableTable({ tableHead, tableContent }) {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = tableContent.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -122,13 +119,22 @@ export default function PageableTable({ tableHead, tableContent }) {
     filterName
   );
 
+  const handleEditClicked = () => {
+    onEditButtonClicked(selected);
+    setOpen(null);
+  };
+
+  const handleDeleteClicked = () => {
+    onDeleteButtonClicked(selected);
+    setOpen(null);
+  }
+
   const isNotFound = !filteredUsers.length && !!filterName;
 
   return (
     <>
       <Card>
         <TableListToolbar
-          numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
         />
@@ -141,9 +147,7 @@ export default function PageableTable({ tableHead, tableContent }) {
                 orderBy={orderBy}
                 headLabel={tableHead}
                 rowCount={tableContent.length}
-                numSelected={selected.length}
                 onRequestSort={handleRequestSort}
-                onSelectAllClick={handleSelectAllClick}
               />
               <TableBody>
                 {filteredUsers
@@ -158,7 +162,7 @@ export default function PageableTable({ tableHead, tableContent }) {
                                 <IconButton
                                   size="large"
                                   color="inherit"
-                                  onClick={handleOpenMenu}
+                                  onClick={(e) => handleOpenMenu(e, row.id)}
                                 >
                                   <Iconify icon={"eva:more-vertical-fill"} />
                                 </IconButton>
@@ -251,12 +255,12 @@ export default function PageableTable({ tableHead, tableContent }) {
           },
         }}
       >
-        <MenuItem>
+        <MenuItem onClick={handleEditClicked}>
           <Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
           Edit
         </MenuItem>
 
-        <MenuItem sx={{ color: "error.main" }}>
+        <MenuItem onClick={handleDeleteClicked} sx={{ color: "error.main" }}>
           <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
           Delete
         </MenuItem>
