@@ -4,12 +4,15 @@ import { useMutation } from "react-query";
 import OrderTable from "src/sections/@dashboard/orders/OrderTable";
 // mui
 import { Container } from "@mui/system";
-import { Typography, Stack, TextField, Button, Snackbar, Alert } from "@mui/material";
+import { Typography, Stack, TextField, Button } from "@mui/material";
 // hooks
 import { useCart } from "src/layouts/dashboard/header/cart/CartProvider";
 // requests
 import { placeOrder } from "src/requests";
 import { useSnackbarContext } from "src/components/snackbar/SnackbarProvider";
+import { useGlobalModalContext } from "src/components/dialogs/DialogProvider";
+import { MODAL_TYPES } from 'src/components/dialogs/DialogProvider';
+import { useNavigate } from "react-router-dom";
 
 const convertCartToRequestProducts = (cartProducts) =>
   cartProducts.map((item) => ({
@@ -18,8 +21,10 @@ const convertCartToRequestProducts = (cartProducts) =>
   }));
 
 export default function PlaceOrderPage() {
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
   const { showSnackbar } = useSnackbarContext();
+  const { showModal } = useGlobalModalContext();
+  const navigate = useNavigate();
   const [address, setAddress] = React.useState("");
 
   const placeOrderMutation = useMutation({
@@ -31,6 +36,12 @@ export default function PlaceOrderPage() {
       ),
     onSuccess: (response) => {
       console.log("Success", response);
+      showModal(MODAL_TYPES.CONFIRM_MODAL, {
+        title: "Your order was placed!",
+        description: "Your favorite restaurant is preparing your meal right now. Bon appetit!",
+        confirmCallback: handleOrderPlaced,
+        hideCancelButton: true,
+    });
     },
     onError: (response) => {
       showSnackbar({
@@ -44,6 +55,11 @@ export default function PlaceOrderPage() {
   const handlePlaceOrder = () => {
     placeOrderMutation.mutate();
   };
+
+  const handleOrderPlaced = () => {
+    clearCart();
+    navigate('/dashboard/orders', { replace: true });
+  }
 
   return (
     <>

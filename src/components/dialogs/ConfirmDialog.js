@@ -10,7 +10,7 @@ import { useGlobalModalContext } from './DialogProvider';
 export default function ConfirmDialog() {
     const { hideModal, store } = useGlobalModalContext();
     const { modalProps } = store || {};
-    const { title, description, confirmCallback } = modalProps || {};
+    const { title, description, confirmCallback, hideCancelButton } = modalProps || {};
     const handleClose = () => hideModal();
 
     const handleConfirm = () => {
@@ -34,7 +34,7 @@ export default function ConfirmDialog() {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
+                { !hideCancelButton && <Button onClick={handleClose}>Cancel</Button> }
                 <Button onClick={handleConfirm} autoFocus>
                     Confirm
                 </Button>
