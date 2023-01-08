@@ -9,6 +9,7 @@ import { Typography, Stack, TextField, Button, Snackbar, Alert } from "@mui/mate
 import { useCart } from "src/layouts/dashboard/header/cart/CartProvider";
 // requests
 import { placeOrder } from "src/requests";
+import { useSnackbarContext } from "src/components/snackbar/SnackbarProvider";
 
 const convertCartToRequestProducts = (cartProducts) =>
   cartProducts.map((item) => ({
@@ -16,16 +17,10 @@ const convertCartToRequestProducts = (cartProducts) =>
     quantity: item.quantity,
   }));
 
-const defaultSnackBarState = {
-  isOpen: false,
-  message: "",
-  type: "success"
-}
-
 export default function PlaceOrderPage() {
   const { cart } = useCart();
+  const { showSnackbar } = useSnackbarContext();
   const [address, setAddress] = React.useState("");
-  const [snackBar, setSnackBar] = React.useState(defaultSnackBarState);
 
   const placeOrderMutation = useMutation({
     mutationFn: () =>
@@ -38,10 +33,8 @@ export default function PlaceOrderPage() {
       console.log("Success", response);
     },
     onError: (response) => {
-      setSnackBar({
-        ...snackBar,
+      showSnackbar({
         type: "error",
-        isOpen: true,
         message: response.length > 0 ? response[0] : response
       })
       console.log("Error", response);
@@ -89,19 +82,6 @@ export default function PlaceOrderPage() {
             Place order
           </Button>
         </Stack>
-        <Snackbar
-          open={snackBar.isOpen}
-          autoHideDuration={1500}
-          onClose={() => setSnackBar({ ...snackBar, isOpen: true })}
-        >
-          <Alert
-            severity={snackBar.type}
-            sx={{ width: "100%" }}
-            onClose={() => setSnackBar({ ...snackBar, isOpen: false })}
-          >
-            { snackBar.message } 
-          </Alert>
-        </Snackbar>
       </Container>
     </>
   );
