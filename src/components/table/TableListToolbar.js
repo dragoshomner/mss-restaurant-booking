@@ -38,7 +38,7 @@ TableListToolbar.propTypes = {
   onFilterName: PropTypes.func,
 };
 
-export default function TableListToolbar({ numSelected, filterName, onFilterName }) {
+export default function TableListToolbar({ numSelected, filterName, onFilterName, searchPlaceholder }) {
   return (
     <StyledRoot
       sx={{
@@ -56,7 +56,7 @@ export default function TableListToolbar({ numSelected, filterName, onFilterName
         <StyledSearch
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search products..."
+          placeholder={searchPlaceholder}
           startAdornment={
             <InputAdornment position="start">
               <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />

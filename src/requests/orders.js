@@ -24,3 +24,14 @@ export const placeOrder = async (address, restaurantId, body) => {
     
     return responseData;
 }
+
+export const getMyOrders = async () => {
+  return await (
+    await fetch(process.env.REACT_APP_SERVER_URL + "/order/allUser/" + getUserId(), {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    })
+  ).json();
+};

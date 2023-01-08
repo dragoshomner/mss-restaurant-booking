@@ -1,5 +1,6 @@
 import { filter } from "lodash";
 import { useState } from "react";
+import Parser from 'html-react-parser';
 // @mui
 import {
   Card,
@@ -66,6 +67,7 @@ export default function PageableTable({
   tableContent,
   onEditButtonClicked,
   onDeleteButtonClicked,
+  searchPlaceholder
 }) {
   const [open, setOpen] = useState(null);
 
@@ -137,6 +139,7 @@ export default function PageableTable({
         <TableListToolbar
           filterName={filterName}
           onFilterName={handleFilterByName}
+          searchPlaceholder={searchPlaceholder || "Search..."}
         />
 
         <Scrollbar>
@@ -178,7 +181,7 @@ export default function PageableTable({
                                 align="left"
                               >
                                 <Typography variant="subtitle2">
-                                  {row[tableHeadItem.id]}
+                                  { Parser(row[tableHeadItem.id]) }
                                 </Typography>
                               </TableCell>
                             );
