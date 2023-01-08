@@ -9,6 +9,7 @@ import { StyledChart } from './components/chart';
 import { AuthProvider } from './sections/auth/utils/AuthProvider';
 import { CartProvider } from './layouts/dashboard/header/cart/CartProvider';
 import { GlobalModal } from './components/dialogs/DialogProvider';
+import { GlobalSnackbar } from './components/snackbar/SnackbarProvider';
 
 // ----------------------------------------------------------------------
 
@@ -19,13 +20,15 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <GlobalModal>
-          <CartProvider>
-            <ThemeProvider>
-              <ScrollToTop />
-              <StyledChart />
-              <Router />
-            </ThemeProvider>
-          </CartProvider>
+          <GlobalSnackbar>
+            <CartProvider>
+              <ThemeProvider>
+                <ScrollToTop />
+                <StyledChart />
+                <Router />
+              </ThemeProvider>
+            </CartProvider>
+          </GlobalSnackbar>
         </GlobalModal>
       </AuthProvider>
     </QueryClientProvider>

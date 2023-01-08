@@ -29,7 +29,7 @@ export default function AddOrEditProductDialog() {
 
   const { hideModal, store } = useGlobalModalContext();
   const { modalProps } = store || {};
-  const { operation } = modalProps || {};
+  const { operation, handleSaveClicked } = modalProps || {};
   const handleClose = () => hideModal();
 
   const handleSave = () => {
@@ -40,11 +40,17 @@ export default function AddOrEditProductDialog() {
     mutationFn: () => addProduct(product),
     onSuccess: () => {
       queryClient.invalidateQueries(["get-my-products"]);
+      handleSaveClicked({
+        message: "Product was successfully saved!",
+      });
       handleClose();
     },
     onError: (error) => {
-        console.log("Error: ", error[0]);
-    }
+      handleSaveClicked({
+        type: "error",
+        message: error.length > 0 ? error[0] : error,
+      });
+    },
   });
 
   const isSaveButtonDisabled = Object.values(product).some((item) =>

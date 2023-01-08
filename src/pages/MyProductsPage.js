@@ -13,6 +13,7 @@ import {
   useGlobalModalContext,
 } from "src/components/dialogs/DialogProvider";
 import { PRODUCT_DIALOG_OPERATION } from "src/components/dialogs/AddOrEditProductDialog";
+import { useSnackbarContext } from "src/components/snackbar/SnackbarProvider";
 
 // ----------------------------------------------------------------------
 
@@ -35,14 +36,18 @@ const mapTableContent = (tableContent) =>
 
 export default function UserPage() {
   const { showModal } = useGlobalModalContext();
+  const { showSnackbar } = useSnackbarContext();
   const { data: products, isLoading: isLoadingProducts } = useQuery(
     ["get-my-products"],
     () => getMyProducts()
   );
 
+  const handleSaveClicked = (snackbarProps) => showSnackbar(snackbarProps);
+
   const handleNewProductClick = () => {
     showModal(MODAL_TYPES.ADD_OR_EDIT_PRODUCT_MODAL, {
       operation: PRODUCT_DIALOG_OPERATION.ADD,
+      handleSaveClicked
     });
   };
 
