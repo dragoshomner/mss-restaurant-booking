@@ -9,3 +9,5 @@ export const getAuthUser = () => {
 export const getAuthToken = () => getAuthUser()?.token ?? "";
 
 export const getUserId = () => getAuthUser().userId ?? "";
+
+export const getAuthRole = () => getAuthUser().role ?? "";

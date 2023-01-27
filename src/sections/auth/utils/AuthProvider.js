@@ -2,6 +2,7 @@ import * as React from 'react';
 import { AuthContext } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'src/hooks/useLocalStorage';
+import { ROLE_DELIVERY, ROLE_RESTMAN } from '../login/constants';
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
@@ -19,7 +20,11 @@ export const AuthProvider = ({ children }) => {
     if (response.ok) {
       const data = await response.json();
       setAuthUser(data);
-      navigate('/dashboard', { replace: true });
+      if (data.role === ROLE_DELIVERY || data.role === ROLE_RESTMAN) {
+        navigate('/dashboard/orders', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
     }
   };
 

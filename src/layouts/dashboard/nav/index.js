@@ -13,7 +13,7 @@ import Scrollbar from '../../../components/scrollbar';
 import NavSection from '../../../components/nav-section';
 //
 import navConfig from './config';
-import { getAuthUser } from 'src/requests/utils';
+import { getAuthRole, getAuthUser } from 'src/requests/utils';
 
 // ----------------------------------------------------------------------
 
@@ -72,7 +72,7 @@ export default function Nav({ openNav, onCloseNav }) {
         </Link>
       </Box>
 
-      <NavSection data={navConfig} />
+      <NavSection data={navConfig.filter(n => n.roles.includes(getAuthRole()))} />
 
       <Box sx={{ flexGrow: 1 }} />
 

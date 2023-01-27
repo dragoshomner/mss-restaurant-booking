@@ -1,10 +1,10 @@
 import { Helmet } from "react-helmet-async";
 // @mui
-import { Stack, Button, Container, Typography } from "@mui/material";
+import { Stack, Container, Typography, Button } from "@mui/material";
 // components
 import PageableTable from "src/components/table/PageableTable";
 // requests
-import { deleteProduct, getMyOrders } from "src/requests";
+import { deleteProduct, getMyOrders, getAllOrders, getAllOrdersForRestaurant, changeOrderStatus } from "src/requests";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 // modals
 import {
@@ -13,6 +13,8 @@ import {
 } from "src/components/dialogs/DialogProvider";
 import { PRODUCT_DIALOG_OPERATION } from "src/components/dialogs/AddOrEditProductDialog";
 import { useSnackbarContext } from "src/components/snackbar/SnackbarProvider";
+import { ROLE_DELIVERY, ROLE_RESTMAN, ROLE_USER } from "src/sections/auth/login/constants";
+import { useAuth } from "src/sections/auth/utils/useAuth";
 
 // ----------------------------------------------------------------------
 
@@ -21,10 +23,10 @@ const TABLE_HEAD = [
   { id: "totalPrice", label: "Total Price", alignRight: false },
   { id: "address", label: "Address", alignRight: false },
   { id: "restaurantName", label: "Restaurant Name", alignRight: false },
-  { id: "status", label: "Status", alignRight: false },
+  { id: "status", label: "Status", alignRight: false }
 ];
 
-const mapTableContent = (tableContent) =>
+const mapTableContent = (tableContent, showPickButton = false) =>
   tableContent.map((item) => {
     return {
       ...item,
@@ -32,16 +34,51 @@ const mapTableContent = (tableContent) =>
       name: item.productList.join('<br/>'),
       totalPrice: item.totalPrice + " RON",
       quantity: item.quantity + " pcs",
+      status: showPickButton && item.status !== "delivered" ? 
+        <StatusActionButton item={item} /> : 
+        item.status,
     };
   });
+
+const getOrdersCallback = (userRole) => {
+  if (userRole === ROLE_RESTMAN) {
+    return () => getAllOrdersForRestaurant();
+  } else if (userRole === ROLE_USER) {
+    return () => getMyOrders();
+  }
+  return () => getAllOrders();
+}
+
+const StatusActionButton = ({ item }) => {
+  const queryClient = useQueryClient();
+  const changeOrderStatusMutation = useMutation({
+    mutationFn: (id) => changeOrderStatus(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["get-my-orders"]);
+    }
+  });
+
+  const handleClick = () => changeOrderStatusMutation.mutate(item.orderId);
+  const getButtonText = () => {
+    if (item.status === "preparing") {
+      return "Pick";
+    } else if (item.status === "on the way") {
+      return "Leave";
+    } 
+    return item.status;
+  }
+
+  return <Button onClick={handleClick}>{getButtonText()}</Button>
+}
 
 export default function OrdersPage() {
   const queryClient = useQueryClient();
   const { showModal } = useGlobalModalContext();
   const { showSnackbar } = useSnackbarContext();
+  const { authUser } = useAuth();
   const { data: products, isLoading: isLoadingProducts } = useQuery(
     ["get-my-orders"],
-    () => getMyOrders()
+    getOrdersCallback(authUser.role)
   );
 
   const deleteProductMutation = useMutation({
@@ -79,6 +116,8 @@ export default function OrdersPage() {
     });
   }
 
+  const showStatusActionButton = authUser.role === ROLE_DELIVERY;
+
   return (
     <>
       <Helmet>
@@ -100,7 +139,7 @@ export default function OrdersPage() {
         {!isLoadingProducts && (
           <PageableTable
             tableHead={TABLE_HEAD}
-            tableContent={mapTableContent(products)}
+            tableContent={mapTableContent(products, showStatusActionButton)}
             onEditButtonClicked={handleEditButtonClicked}
             onDeleteButtonClicked={handleDeleteButtonClicked}
             searchPlaceholder="Search orders..."
