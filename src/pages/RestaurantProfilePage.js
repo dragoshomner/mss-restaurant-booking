@@ -10,10 +10,13 @@ import { getRestaurantProducts, getRestaurantReview } from "src/requests";
 import { useQuery } from 'react-query';
 import { ReviewList } from 'src/sections/@dashboard/reviews';
 import ReviewAddForm from 'src/sections/@dashboard/reviews/ReviewAddForm';
+import { useAuth } from 'src/sections/auth/utils/useAuth';
+import { ROLE_USER } from 'src/sections/auth/login/constants';
 
 export default function RestaurantProfilePage() {
     const navigate = useNavigate();
     const { id: restaurantId } = useParams();
+    const { authUser } = useAuth();
     
     const { data: products, isLoading: isLoadingProducts } = useQuery(
         ["get-restaurant-products", restaurantId], 
@@ -23,6 +26,8 @@ export default function RestaurantProfilePage() {
         ["get-restaurant-reviews", restaurantId],
         () => getRestaurantReview(restaurantId)
     )
+
+    const showReviewForm = authUser.role === ROLE_USER;
 
     return (
         <>
@@ -41,7 +46,7 @@ export default function RestaurantProfilePage() {
 
                 { !isLoadingReviews && reviewData?.reviewList?.length > 0 && <ReviewList reviewData={reviewData} /> }
 
-                <ReviewAddForm restaurantId={restaurantId} mt={2} />
+                { showReviewForm && <ReviewAddForm restaurantId={restaurantId} mt={2} /> }
 
             </Container>
         </>

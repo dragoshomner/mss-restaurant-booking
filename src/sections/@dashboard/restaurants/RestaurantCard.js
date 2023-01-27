@@ -6,6 +6,8 @@ import Iconify from '../../../components/iconify';
 // requests
 import { useMutation, useQueryClient } from 'react-query';
 import { toggleRestaurantToFavorites } from 'src/requests';
+import { useAuth } from 'src/sections/auth/utils/useAuth';
+import { ROLE_USER } from 'src/sections/auth/login/constants';
 
 // ----------------------------------------------------------------------
 
@@ -16,6 +18,8 @@ RestaurantCard.propTypes = {
 
 export default function RestaurantCard({ restaurant, isFavorite }) {
   const queryClient = useQueryClient();
+  const { authUser } = useAuth();
+
   const { id, name, address, managerName } = restaurant;
   const favoriteIcon = isFavorite ? "material-symbols:star-rounded" : "material-symbols:star-outline-rounded";
 
@@ -30,14 +34,21 @@ export default function RestaurantCard({ restaurant, isFavorite }) {
     favoriteMutation.mutate();
   }
 
-  return (
-    <Card>
-      <CardHeader
-        action={
+  const getCardHeaderActionButton = () => {
+    if (authUser.role === ROLE_USER) {
+      return (
           <IconButton aria-label="settings" onClick={handleAddToFavorites}>
             <Iconify icon={favoriteIcon} />
           </IconButton>
-        }
+      );
+    }
+    return null;
+  }
+
+  return (
+    <Card>
+      <CardHeader
+        action={getCardHeaderActionButton()}
         title={<Link href={`/dashboard/restaurants/${id}`} color="inherit" underline="hover"> {name} </Link>}
         titleTypographyProps={{ variant: 'subtitle1' }}
       />

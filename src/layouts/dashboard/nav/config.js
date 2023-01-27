@@ -12,7 +12,7 @@ const navConfig = [
     title: 'user',
     path: '/dashboard/user',
     icon: icon('ic_user'),
-    roles: [ROLE_ADMIN]
+    roles: []
   },
   {
     title: 'restaurants',

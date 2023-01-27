@@ -11,6 +11,8 @@ import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import CartPopover from './cart/CartPopover';
+import { useAuth } from 'src/sections/auth/utils/useAuth';
+import { ROLE_USER } from 'src/sections/auth/login/constants';
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +45,10 @@ Header.propTypes = {
 };
 
 export default function Header({ onOpenNav }) {
+  const { authUser } = useAuth();
+
+  const showCartButton = authUser.role === ROLE_USER;
+
   return (
     <StyledRoot>
       <StyledToolbar>
@@ -57,7 +63,7 @@ export default function Header({ onOpenNav }) {
           <Iconify icon="eva:menu-2-fill" />
         </IconButton>
 
-        <Searchbar />
+        {/* <Searchbar /> */}
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack
@@ -68,9 +74,9 @@ export default function Header({ onOpenNav }) {
             sm: 1,
           }}
         >
-          <LanguagePopover />
+          {/* <LanguagePopover /> */}
           {/* <NotificationsPopover /> */}
-          <CartPopover />
+          { showCartButton && <CartPopover /> }
           <AccountPopover />
         </Stack>
       </StyledToolbar>
