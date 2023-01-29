@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }) => {
         navigate('/dashboard', { replace: true });
       }
     }
+    return false;
   };
 
   const handleLogout = () => {

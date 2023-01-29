@@ -8,7 +8,7 @@ import { useAuth } from '../utils/useAuth';
 
 // ----------------------------------------------------------------------
 
-export default function LoginForm() {
+export default function LoginForm({ setAlert }) {
   const { onLogin } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +16,16 @@ export default function LoginForm() {
     email: "",
     password: ""
   });
+
+  const handleLogin = async () => {
+    const response = await onLogin(credentials);
+    if (!response) {
+      setAlert({
+        severity: "error",
+        message: "Wrong credentials! Please try again."
+      });
+    }
+  }
 
   return (
     <>
@@ -45,8 +55,14 @@ export default function LoginForm() {
         />
       </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" sx={{ my: 2 }} onClick={() => onLogin(credentials)}>
-        Login
+      <LoadingButton 
+        fullWidth 
+        size="large" 
+        type="submit" 
+        variant="contained" 
+        sx={{ my: 2 }} 
+        onClick={handleLogin}>
+          Login
       </LoadingButton>
     </>
   );

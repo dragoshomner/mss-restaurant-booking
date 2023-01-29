@@ -1,11 +1,12 @@
+import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Link, Container, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 // hooks
 import useResponsive from '../hooks/useResponsive';
-// sections
-import { LoginForm } from '../sections/auth/login';
+import { LoginFormContainer } from 'src/sections/auth/login/LoginFormContainer';
+import { RegisterFormContainer } from 'src/sections/auth/register/RegisterFormContainer';
 
 // ----------------------------------------------------------------------
 
@@ -35,15 +36,49 @@ const StyledContent = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
+const VIEWS = {
+  LOGIN: "LOGIN_VIEW",
+  REGISTER: "REGISTER_VIEW"
+};
+
 // ----------------------------------------------------------------------
 
 export default function LoginPage() {
   const mdUp = useResponsive('up', 'md');
+  const [currentScreen, setCurrentScreen] = React.useState({ 
+    view: VIEWS.LOGIN,
+    alert: {
+      severity: "error",
+      message: ""
+    }
+  });
+
+  const getcurrentScreen = () => {
+    if (currentScreen.view === VIEWS.REGISTER) {
+      const goToLoginView = (message) => {
+        setCurrentScreen({
+          view: VIEWS.LOGIN,
+          alert: {
+            severity: "success",
+            message: message
+          }
+        });
+      }
+      return <RegisterFormContainer 
+        goToLoginView={goToLoginView} 
+      />; 
+    }
+    return <LoginFormContainer 
+      goToRegisterView={() => setCurrentScreen({...currentScreen, view: VIEWS.REGISTER })}
+      setAlert={(_alert) => setCurrentScreen({...currentScreen, alert: _alert})}
+      alert={currentScreen.alert} 
+    />;
+  }
 
   return (
     <>
       <Helmet>
-        <title> Login </title>
+        <title> Authenticate </title>
       </Helmet>
 
       <StyledRoot>
@@ -59,16 +94,7 @@ export default function LoginPage() {
 
         <Container maxWidth="sm">
           <StyledContent>
-            <Typography variant="h4" gutterBottom>
-              Sign in
-            </Typography>
-
-            <Typography variant="body2" sx={{ mb: 5 }}>
-              Don’t have an account? {''}
-              <Link variant="subtitle2">Get started</Link>
-            </Typography>
-
-            <LoginForm />
+            { getcurrentScreen() }
           </StyledContent>
         </Container>
       </StyledRoot>
